@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       String  @id @db.Uuid @default(uuid())
+  fullName String
+  email    String  @unique
+  password String
+
+  @@map("admins")
+}
+
+model Tutor {
+  id           String       @id @db.Uuid @default(uuid())
+  fullName     String
+  email        String       @unique
+  password String
+  phoneNumber  String
+  position     String
+  universityId String
+  placements   Placement[]
+  createdAt    DateTime     @default(now())
+  registrationStatus  ApplicationStatus
+
+  @@map("tutors")
+}
+
+model Student {
+  id                     String                 @id @db.Uuid @default(uuid())
+  fullName               String
+  email                  String                 @unique
+  password               String
+  phoneNumber            String
+  currentLevel           String
+  course                 String
+  universityId           String
+  placements             Placement[]
+  registrationStatus     ApplicationStatus
+  authorizationRequests  AuthorizationRequest[]
+  createdAt              DateTime               @default(now())
+
+  @@map("students")
+}
+
+model AuthorizationRequest {
+  id                 String                     @id @db.Uuid @default(uuid())
+  companyName        String
+  companySector      String
+  location           String
+  duration           String
+  potentialEndDate   DateTime
+  potentialStartDate DateTime
+  requestForm        String
+  placement          Placement?
+  adminComment       String                     @db.VarChar(255)
+  studentComment     String                     @db.VarChar(255)
+  updatedAt          DateTime                   @updatedAt
+  createdAt          DateTime                   @default(now())
+  status             ApplicationStatus          @default(pending)
+  studentId          String                     @db.Uuid
+  student            Student                    @relation(fields: [studentId], references: [id])
+
+  @@map("authorizationRequests")
+}
+
+model Placement {
+  id                     String               @id @db.Uuid @default(uuid())
+  companyName            String
+  companySector          String
+  location               String
+  endDate                DateTime
+  startDate              DateTime
+  status                 PlacementStatus      @default(active)
+  scheduledVisitDate     DateTime
+  scheduledVisitType     ScheduledVisitType
+  scheduledVisitStatus   ScheduledVisitStatus @default(pending)
+  updatedAt              DateTime             @updatedAt
+  createdAt              DateTime             @default(now())
+  tutorId                String               @db.Uuid
+  studentId              String               @db.Uuid
+  authorizationRequestId String               @db.Uuid
+  tutor                  Tutor                @relation(fields: [tutorId], references: [id])
+  student                Student              @relation(fields: [studentId], references: [id])
+  authorizationRequest   AuthorizationRequest @relation(fields: [authorizationRequestId], references: [id])
+
+  @@map("placements")
+}
+
+model PlacementMonthlyReport {
+  id          String   @id @db.Uuid @default(uuid())
+  month       String
+  report      String
+  rating      Int
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@map("placementMonthlyReports")
+}
+
+enum ScheduledVisitStatus {
+  done
+  pending
+}
+
+enum ScheduledVisitType {
+  virtual
+  physical
+}
+
+enum PlacementStatus {
+  active
+  completed
+}
+
+enum ApplicationStatus {
+  pending
+  approved
+  rejected
+}
