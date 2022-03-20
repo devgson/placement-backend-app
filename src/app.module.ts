@@ -7,10 +7,21 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { StudentModule } from './modules/student/student.module';
 import { TutorModule } from './modules/tutor/tutor.module';
+import { CloudinaryProvider } from './services/file/file.provider';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-  imports: [AuthModule, AdminModule, StudentModule, TutorModule],
+  imports: [
+    MulterModule.register({
+      dest: './upload',
+    }),
+    AuthModule,
+    AdminModule,
+    StudentModule,
+    TutorModule,
+  ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, FileService],
+  providers: [CloudinaryProvider, AppService, PrismaService, FileService],
+  exports: [FileService, PrismaService],
 })
 export class AppModule {}
