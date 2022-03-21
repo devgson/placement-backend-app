@@ -1,35 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 
 @Injectable()
 export class AuthRepository {
   constructor(private prisma: PrismaService) {}
 
-  async registerStudent(data) {
-    return await this.prisma.student.create({
-      data,
-    });
+  async registerStudent(data: Prisma.StudentCreateInput) {
+    return await this.prisma.student.create({ data });
   }
 
-  async registerTutor(data) {
+  async registerTutor(data: Prisma.TutorCreateInput) {
     return await this.prisma.tutor.create({ data });
   }
 
-  async getStudent(email: string, password: string) {
+  async getStudent(criteria: Prisma.StudentWhereInput) {
     return await this.prisma.student.findFirst({
-      where: { email, password },
+      where: criteria,
     });
   }
 
-  async getTutor(email: string, password: string) {
+  async getTutor(criteria: Prisma.TutorWhereInput) {
     return await this.prisma.tutor.findFirst({
-      where: { email, password },
+      where: criteria,
     });
   }
 
-  async getAdmin(email: string, password: string) {
+  async getAdmin(criteria: Prisma.AdminWhereInput) {
     return await this.prisma.admin.findFirst({
-      where: { email, password },
+      where: criteria,
     });
   }
 }

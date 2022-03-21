@@ -20,16 +20,16 @@ model Admin {
 }
 
 model Tutor {
-  id           String       @id @db.Uuid @default(uuid())
-  fullName     String
-  email        String       @unique
-  password String
-  phoneNumber  String
-  position     String
-  universityId String
-  placements   Placement[]
-  createdAt    DateTime     @default(now())
-  registrationStatus  ApplicationStatus
+  id                  String            @id @db.Uuid @default(uuid())
+  fullName             String
+  email               String            @unique
+  password            String
+  phoneNumber         String
+  position            String
+  universityId        String
+  placements          Placement[]
+  createdAt           DateTime          @default(now())
+  registrationStatus  ApplicationStatus @default(pending)
 
   @@map("tutors")
 }
@@ -43,8 +43,8 @@ model Student {
   currentLevel           String
   course                 String
   universityId           String
-  placements             Placement[]
-  registrationStatus     ApplicationStatus
+  placements             Placement[]            
+  registrationStatus     ApplicationStatus      @default(pending)
   authorizationRequests  AuthorizationRequest[]
   createdAt              DateTime               @default(now())
 
