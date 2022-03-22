@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { FileService } from 'src/services/file/file.service';
 import { RegisterTutorDto } from './dto/register-tutor.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ApplicationStatus } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -27,27 +28,35 @@ export class AuthService {
     const admin = await this.authRepository.getAdmin({ email });
     if (!admin) throw new UnauthorizedException('Invalid Email');
     const invalidPassword = password !== admin.password;
-    if (!invalidPassword) throw new UnauthorizedException('Invalid Password');
+    if (invalidPassword) throw new UnauthorizedException('Invalid Password');
     delete admin.password;
-    return await this.generateJWT(admin);
+    return await this.generateJWT({ ...admin, role: 'admin' });
   }
 
   async studentLogin(email: string, password: string) {
     const student = await this.authRepository.getStudent({ email });
     if (!student) throw new UnauthorizedException('Invalid Email');
+    if (student.registrationStatus !== ApplicationStatus.approved)
+      throw new UnauthorizedException(
+        'Your registration is still under review',
+      );
     const invalidPassword = await bcrypt.compare(password, student.password);
     if (!invalidPassword) throw new UnauthorizedException('Invalid Password');
     delete student.password;
-    return await this.generateJWT(student);
+    return await this.generateJWT({ ...student, role: 'student' });
   }
 
   async tutorLogin(email: string, password: string) {
     const tutor = await this.authRepository.getTutor({ email });
     if (!tutor) throw new UnauthorizedException('Invalid Email');
+    if (tutor.registrationStatus !== ApplicationStatus.approved)
+      throw new UnauthorizedException(
+        'Your registration is still under review',
+      );
     const invalidPassword = await bcrypt.compare(password, tutor.password);
     if (!invalidPassword) throw new UnauthorizedException('Invalid Password');
     delete tutor.password;
-    return await this.generateJWT(tutor);
+    return await this.generateJWT({ ...tutor, role: 'tutor' });
   }
 
   async registerStudent(
