@@ -12,7 +12,7 @@ export interface Response {
   data: any;
 }
 @Injectable()
-export class ReponseTransformerInterceptor implements NestInterceptor {
+export class ResponseTransformerInterceptor implements NestInterceptor {
   intercept(
     context: ExecutionContext,
     handler: CallHandler,
@@ -22,7 +22,7 @@ export class ReponseTransformerInterceptor implements NestInterceptor {
         return {
           statusCode: context.switchToHttp().getResponse().statusCode,
           message: data.message,
-          data: data.result,
+          data: data.data,
         };
       }),
     );

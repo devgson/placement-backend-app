@@ -24,6 +24,10 @@ export class AuthService {
     return this.jwtService.sign(payload, { expiresIn: '1 day' });
   }
 
+  async validateJWT(token) {
+    return this.jwtService.verify(token);
+  }
+
   async adminLogin(email: string, password: string) {
     const admin = await this.authRepository.getAdmin({ email });
     if (!admin) throw new UnauthorizedException('Invalid Email');
@@ -66,7 +70,7 @@ export class AuthService {
     const { email } = student;
     const studentExists = await this.authRepository.getStudent({ email });
     if (studentExists) throw new BadRequestException('Email Already Exists');
-    const uploadedFile = await this.fileService.uploadImage(file);
+    const uploadedFile = await this.fileService.uploadFile(file);
     const password = await bcrypt.hash(student.password, 10);
     student.password = password;
     student.universityId = uploadedFile.secure_url;
@@ -77,7 +81,7 @@ export class AuthService {
     const { email } = tutor;
     const tutorExists = await this.authRepository.getTutor({ email });
     if (tutorExists) throw new BadRequestException('Email Already Exists');
-    const uploadedFile = await this.fileService.uploadImage(file);
+    const uploadedFile = await this.fileService.uploadFile(file);
     const password = await bcrypt.hash(tutor.password, 10);
     tutor.password = password;
     tutor.universityId = uploadedFile.secure_url;

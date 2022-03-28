@@ -85,6 +85,7 @@ model Placement {
   scheduledVisitStatus   ScheduledVisitStatus @default(pending)
   updatedAt              DateTime             @updatedAt
   createdAt              DateTime             @default(now())
+  monthlyReports         PlacementMonthlyReport[]
   tutorId                String               @db.Uuid
   studentId              String               @db.Uuid
   authorizationRequestId String               @db.Uuid
@@ -102,6 +103,8 @@ model PlacementMonthlyReport {
   rating      Int
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
+  placementId String   @db.Uuid
+  placement   Placement @relation(fields: [placementId], references: [id])
 
   @@map("placementMonthlyReports")
 }
