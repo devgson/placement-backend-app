@@ -52,7 +52,7 @@ export const SubmitPlacementReportSchema = {
   }),
 
   params: Joi.object({
-    id: Joi.string().guid().messages({
+    placementId: Joi.string().guid().messages({
       'any.required': 'Placement Id is required',
       'string.empty': 'Placement Id cannot be empty',
       'string.guid': 'Placement Id must be a valid uuid',
@@ -77,7 +77,7 @@ export const GetAuthorizationRequestSchema = Joi.object({
     .optional(),
 });
 
-export const CreateAuthorizationSchema = {
+export const CreateAuthorizationRequestSchema = {
   file: Joi.object({
     fieldname: Joi.string().required(),
     originalname: Joi.string().required(),
@@ -139,7 +139,7 @@ export const CreateAuthorizationSchema = {
 };
 
 export const DeleteAuthorizationRequestSchema = Joi.object({
-  id: Joi.string()
+  authorizationRequestId: Joi.string()
     .guid()
     .messages({
       'string.empty': 'Authorization Request cannot be empty',

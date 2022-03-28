@@ -42,6 +42,15 @@ export class StudentRepository {
     });
   }
 
+  async createAuthorizationRequest(
+    data: Prisma.AuthorizationRequestCreateInput,
+  ) {
+    return await this.prisma.authorizationRequest.create({
+      data,
+      include: { student: true },
+    });
+  }
+
   async createPlacementReport(data: Prisma.PlacementMonthlyReportCreateInput) {
     return await this.prisma.placementMonthlyReport.create({
       data,

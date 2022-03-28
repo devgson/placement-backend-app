@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Body,
   Controller,
@@ -11,16 +10,14 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
-  UsePipes,
 } from '@nestjs/common';
 import {
-  CreateAuthorizationSchema,
+  CreateAuthorizationRequestSchema,
   DeleteAuthorizationRequestSchema,
   GetAuthorizationRequestSchema,
   GetPlacementSchema,
   SubmitPlacementReportSchema,
 } from './student.schema';
-import { RegisterTutorDto } from '../auth/dto/register-tutor.dto';
 import { JoiValidationPipe } from './student.pipe';
 import { StudentService } from './student.service';
 import { StudentGuard } from './student.guard';
@@ -29,6 +26,7 @@ import {
   StudentAuthInterceptor,
 } from './student.interceptor';
 import { CreatePlacementReportDto } from './dto/create-placement-report';
+import { CreateAuthorizationRequestDto } from './dto/create-authorization-request';
 
 @UseGuards(StudentGuard)
 @UseInterceptors(StudentAuthInterceptor)
@@ -100,12 +98,25 @@ export class StudentController {
 
   @Post('/authorization-requests')
   async createAuthorizationRequest(
-    @Body(new JoiValidationPipe(CreateAuthorizationSchema.body))
-    body: RegisterTutorDto,
+    @Req() req,
 
-    @UploadedFile(new JoiValidationPipe(CreateAuthorizationSchema.file))
+    @Body(new JoiValidationPipe(CreateAuthorizationRequestSchema.body))
+    body: CreateAuthorizationRequestDto,
+
+    @UploadedFile(new JoiValidationPipe(CreateAuthorizationRequestSchema.file))
     file: Express.Multer.File,
-  ) {}
+  ) {
+    const authorizationRequest =
+      await this.studentService.createAuthorizationRequest(
+        req.user.id,
+        body,
+        file,
+      );
+    return {
+      data: authorizationRequest,
+      message: 'Created authorization request successfully',
+    };
+  }
 
   @Delete('/authorization-requests/:authorizationRequestId')
   async deleteAuthorizationRequest(

@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ApplicationStatus, PlacementStatus, Prisma } from '@prisma/client';
 import { FileService } from 'src/services/file/file.service';
+import { CreateAuthorizationRequestDto } from './dto/create-authorization-request';
 import { CreatePlacementReportDto } from './dto/create-placement-report';
 import { StudentRepository } from './student.repository';
 
@@ -41,6 +42,21 @@ export class StudentService {
     return await this.studentRepository.deleteAuthorizationRequest(
       authorizationRequest.id,
     );
+  }
+
+  async createAuthorizationRequest(
+    studentId: string,
+    authorizationRequest: CreateAuthorizationRequestDto,
+    file: Express.Multer.File,
+  ) {
+    const uploadedFile = await this.fileService.uploadFile(file);
+    return await this.studentRepository.createAuthorizationRequest({
+      ...authorizationRequest,
+      requestForm: uploadedFile.secure_url,
+      student: {
+        connect: { id: studentId },
+      },
+    });
   }
 
   async submitMonthlyReport(
