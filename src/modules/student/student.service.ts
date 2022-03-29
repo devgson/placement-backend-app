@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ApplicationStatus, PlacementStatus, Prisma } from '@prisma/client';
-import { FileService } from 'src/services/file/file.service';
+import { FileService } from 'src/services/file.service';
 import { CreateAuthorizationRequestDto } from './dto/create-authorization-request';
 import { CreatePlacementReportDto } from './dto/create-placement-report';
 import { StudentRepository } from './student.repository';

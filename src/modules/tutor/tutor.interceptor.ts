@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-import { StudentRepository } from './student.repository';
+import { TutorRepository } from './tutor.repository';
 
 export interface Response {
   statusCode: number;
@@ -15,10 +15,10 @@ export interface Response {
 }
 
 @Injectable()
-export class StudentAuthInterceptor implements NestInterceptor {
+export class TutorAuthInterceptor implements NestInterceptor {
   constructor(
     private authService: AuthService,
-    private studentRepository: StudentRepository,
+    private tutorRepository: TutorRepository,
   ) {}
 
   async intercept(
@@ -28,10 +28,10 @@ export class StudentAuthInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
     const jwt = request.headers?.authorization.replace('Bearer ', '');
     const token = await this.authService.validateJWT(jwt);
-    const student = await this.studentRepository.getStudent({
+    const tutor = await this.tutorRepository.getTutor({
       email: token.email,
     });
-    request.user = student;
+    request.user = tutor;
     return next.handle();
   }
 }

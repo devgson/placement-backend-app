@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/services/prisma/prisma.service';
+import { PrismaService } from 'src/services/prisma.service';
 
 @Injectable()
 export class StudentRepository {
   constructor(private prisma: PrismaService) {}
+
+  async getStudent(criteria: Prisma.StudentWhereInput) {
+    return await this.prisma.student.findFirst({
+      where: criteria,
+    });
+  }
 
   async getPlacement(criteria: Prisma.PlacementWhereInput) {
     return await this.prisma.placement.findFirst({
