@@ -8,6 +8,7 @@ import { AppModule } from 'src/app.module';
 @Module({
   imports: [AuthModule, forwardRef(() => AppModule)],
   controllers: [StudentController],
+  exports: [StudentService, StudentRepository],
   providers: [StudentService, StudentRepository],
 })
 export class StudentModule {}

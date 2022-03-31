@@ -8,6 +8,7 @@ import { TutorService } from './tutor.service';
 @Module({
   imports: [AuthModule, forwardRef(() => AppModule)],
   controllers: [TutorController],
+  exports: [TutorService, TutorRepository],
   providers: [TutorService, TutorRepository],
 })
 export class TutorModule {}

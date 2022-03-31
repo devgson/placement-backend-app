@@ -6,6 +6,20 @@ import { PrismaService } from 'src/services/prisma.service';
 export class StudentRepository {
   constructor(private prisma: PrismaService) {}
 
+  async getStudents(criteria: Prisma.StudentWhereInput) {
+    return await this.prisma.student.findMany({
+      where: criteria,
+      include: {
+        placements: {
+          include: {
+            tutor: true,
+            monthlyReports: true,
+          },
+        },
+      },
+    });
+  }
+
   async getStudent(criteria: Prisma.StudentWhereInput) {
     return await this.prisma.student.findFirst({
       where: criteria,
@@ -18,9 +32,17 @@ export class StudentRepository {
     });
   }
 
-  async getPlacements(criteria: Prisma.PlacementWhereInput) {
+  async getStudentPlacements(
+    studentId: string,
+    criteria: Prisma.PlacementWhereInput,
+  ) {
     return await this.prisma.placement.findMany({
-      where: criteria,
+      where: { studentId, ...criteria },
+      include: {
+        tutor: true,
+        student: true,
+        monthlyReports: true,
+      },
     });
   }
 

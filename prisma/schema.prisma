@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -21,7 +22,7 @@ model Admin {
 
 model Tutor {
   id                  String            @id @db.Uuid @default(uuid())
-  fullName             String
+  fullName            String
   email               String            @unique
   password            String
   phoneNumber         String

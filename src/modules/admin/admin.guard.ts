@@ -4,14 +4,14 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { AuthRepository } from '../auth/auth.repository';
 import { AuthService } from '../auth/auth.service';
-import { StudentRepository } from './student.repository';
 
 @Injectable()
-export class StudentGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private studentRepository: StudentRepository,
+    private authRepository: AuthRepository,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -20,8 +20,8 @@ export class StudentGuard implements CanActivate {
     await this.authService.validateJWT(token).catch(() => {
       throw new UnauthorizedException('Invalid Token, please obtain a new one');
     });
-    const student = this.studentRepository.getStudent({ email: token.email });
-    if (!student) {
+    const admin = this.authRepository.getAdmin({ email: token.email });
+    if (!admin) {
       throw new UnauthorizedException('Invalid Token, please obtain a new one');
     }
     return true;

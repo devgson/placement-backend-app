@@ -6,6 +6,20 @@ import { PrismaService } from 'src/services/prisma.service';
 export class TutorRepository {
   constructor(private prisma: PrismaService) {}
 
+  async getTutors(criteria: Prisma.TutorWhereInput) {
+    return await this.prisma.tutor.findMany({
+      where: criteria,
+      include: {
+        placements: {
+          include: {
+            student: true,
+            monthlyReports: true,
+          },
+        },
+      },
+    });
+  }
+
   async getTutor(criteria: Prisma.TutorWhereInput) {
     return await this.prisma.tutor.findFirst({
       where: criteria,

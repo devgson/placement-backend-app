@@ -16,7 +16,7 @@ export class StudentService {
     const query: Prisma.PlacementWhereInput = {};
     if (status) query.status = status;
     if (placementId) query.id = placementId;
-    return await this.studentRepository.getPlacements({ studentId, ...query });
+    return await this.studentRepository.getStudentPlacements(studentId, query);
   }
 
   async getAuthorizationRequests(studentId, status, authorizationRequestId) {
