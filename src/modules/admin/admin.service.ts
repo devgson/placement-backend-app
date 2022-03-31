@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ApplicationStatus } from '@prisma/client';
+import { ApplicationStatus, PlacementStatus } from '@prisma/client';
 import { PrismaService } from 'src/services/prisma.service';
 import { StudentRepository } from '../student/student.repository';
 import { TutorRepository } from '../tutor/tutor.repository';
@@ -14,20 +14,27 @@ export class AdminService {
     private studentRepository: StudentRepository,
   ) {}
 
-  async getPlacements(studentId, status, placementId) {
-    const query: any = {};
-    if (status) query.status = status;
-    if (placementId) query.id = placementId;
-    return await this.studentRepository.getStudentPlacements(studentId, query);
+  async getTutors(query) {
+    const criteria: any = {};
+    if (query.id) criteria.id = query.id;
+    if (query.status) criteria.status = ApplicationStatus[query.status];
+    return this.tutorRepository.getTutors(criteria);
   }
 
-  async getRegistrations(criteria) {
-    const query: any = {
+  async getPlacements(query) {
+    const criteria: any = {};
+    if (query.id) criteria.id = query.id;
+    if (query.status) criteria.status = PlacementStatus[query.status];
+    return await this.adminRepository.getPlacements(query);
+  }
+
+  async getRegistrations(query) {
+    const criteria: any = {
       status: ApplicationStatus.pending,
     };
-    if (criteria.id) query.id = criteria.id;
-    if (criteria.status) query.status = ApplicationStatus[criteria.status];
-    switch (criteria.type) {
+    if (query.id) criteria.id = query.id;
+    if (query.status) criteria.status = ApplicationStatus[query.status];
+    switch (query.type) {
       case 'tutor':
         return await this.tutorRepository.getTutors(criteria);
       case 'student':
@@ -64,8 +71,8 @@ export class AdminService {
     }
   }
 
-  async getAuthorizationRequest(criteria) {
-    return await this.adminRepository.getAuthorizationRequests(criteria);
+  async getAuthorizationRequests(query) {
+    return await this.adminRepository.getAuthorizationRequests(query);
   }
 
   async approveAuthorizationRequest(data, authorizationRequestId) {

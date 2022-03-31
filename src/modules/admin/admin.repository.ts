@@ -55,6 +55,17 @@ export class AdminRepository {
     });
   }
 
+  async getPlacements(criteria: Prisma.PlacementWhereInput) {
+    return await this.prisma.placement.findMany({
+      where: criteria,
+      include: {
+        tutor: true,
+        student: true,
+        monthlyReports: true,
+      },
+    });
+  }
+
   async createPlacement(
     authorizationRequest: AuthorizationRequest,
     tutorId: string,

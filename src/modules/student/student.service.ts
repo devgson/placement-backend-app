@@ -13,19 +13,22 @@ export class StudentService {
   ) {}
 
   async getPlacements(studentId, status: PlacementStatus, placementId) {
-    const query: Prisma.PlacementWhereInput = {};
-    if (status) query.status = status;
-    if (placementId) query.id = placementId;
-    return await this.studentRepository.getStudentPlacements(studentId, query);
+    const criteria: Prisma.PlacementWhereInput = {};
+    if (status) criteria.status = status;
+    if (placementId) criteria.id = placementId;
+    return await this.studentRepository.getStudentPlacements(
+      studentId,
+      criteria,
+    );
   }
 
   async getAuthorizationRequests(studentId, status, authorizationRequestId) {
-    const query: Prisma.AuthorizationRequestWhereInput = {};
-    if (status) query.status = status;
-    if (authorizationRequestId) query.id = authorizationRequestId;
+    const criteria: Prisma.AuthorizationRequestWhereInput = {};
+    if (status) criteria.status = status;
+    if (authorizationRequestId) criteria.id = authorizationRequestId;
     return await this.studentRepository.getAuthorizationRequests({
       studentId,
-      ...query,
+      ...criteria,
     });
   }
 
