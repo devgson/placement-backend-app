@@ -1,8 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { ApplicationStatus, PlacementStatus } from '@prisma/client';
 import { PrismaService } from 'src/services/prisma.service';
 import { StudentRepository } from '../student/student.repository';
 import { TutorRepository } from '../tutor/tutor.repository';
+import {
+  GetTutorDto,
+  GetPlacementDto,
+  ApproveRegistrationDto,
+  GetRegistrationsDto,
+  RejectRegistrationDto,
+  ApproveAuthorizationRequestDto,
+  GetAuthorizationRequestsDto,
+  RejectAuthorizationRequestDto,
+} from './admin.dto';
 import { AdminRepository } from './admin.repository';
 
 @Injectable()
@@ -14,40 +23,32 @@ export class AdminService {
     private studentRepository: StudentRepository,
   ) {}
 
-  async getTutors(query) {
-    const criteria: any = {};
-    if (query.id) criteria.id = query.id;
-    if (query.status) criteria.status = ApplicationStatus[query.status];
-    return this.tutorRepository.getTutors(criteria);
+  async getTutors(query: GetTutorDto) {
+    return this.tutorRepository.getTutors(query);
   }
 
-  async getPlacements(query) {
-    const criteria: any = {};
-    if (query.id) criteria.id = query.id;
-    if (query.status) criteria.status = PlacementStatus[query.status];
+  async getPlacements(query: GetPlacementDto) {
     return await this.adminRepository.getPlacements(query);
   }
 
-  async getRegistrations(query) {
-    const criteria: any = {
-      status: ApplicationStatus.pending,
-    };
-    if (query.id) criteria.id = query.id;
-    if (query.status) criteria.status = ApplicationStatus[query.status];
+  async getRegistrations(query: GetRegistrationsDto) {
     switch (query.type) {
       case 'tutor':
-        return await this.tutorRepository.getTutors(criteria);
+        return await this.tutorRepository.getTutors(query);
       case 'student':
-        return await this.studentRepository.getStudents(criteria);
+        return await this.studentRepository.getStudents(query);
       default:
         return await Promise.all([
-          this.tutorRepository.getTutors(criteria),
-          this.studentRepository.getStudents(criteria),
+          this.tutorRepository.getTutors(query),
+          this.studentRepository.getStudents(query),
         ]);
     }
   }
 
-  async approveRegistration(registrationId, type) {
+  async approveRegistration(
+    registrationId,
+    type: ApproveRegistrationDto['type'],
+  ) {
     if (type === 'student') {
       return await this.adminRepository.approveStudentRegistration(
         registrationId,
@@ -60,7 +61,10 @@ export class AdminService {
     }
   }
 
-  async rejectRegistration(registrationId, type) {
+  async rejectRegistration(
+    registrationId,
+    type: RejectRegistrationDto['type'],
+  ) {
     if (type === 'student') {
       return await this.adminRepository.rejectStudentRegistration(
         registrationId,
@@ -71,11 +75,14 @@ export class AdminService {
     }
   }
 
-  async getAuthorizationRequests(query) {
+  async getAuthorizationRequests(query: GetAuthorizationRequestsDto) {
     return await this.adminRepository.getAuthorizationRequests(query);
   }
 
-  async approveAuthorizationRequest(data, authorizationRequestId) {
+  async approveAuthorizationRequest(
+    data: ApproveAuthorizationRequestDto,
+    authorizationRequestId,
+  ) {
     return await this.prisma.$transaction(async () => {
       const request = await this.adminRepository.approveAuthorizationRequest(
         authorizationRequestId,
@@ -91,7 +98,10 @@ export class AdminService {
     });
   }
 
-  async rejectAuthorizationRequest(data, authorizationRequestId) {
+  async rejectAuthorizationRequest(
+    data: RejectAuthorizationRequestDto,
+    authorizationRequestId,
+  ) {
     return await this.adminRepository.rejectAuthorizationRequest(
       authorizationRequestId,
       {
