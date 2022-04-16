@@ -27,6 +27,7 @@ import {
 } from './student.interceptor';
 import { CreatePlacementReportDto } from './dto/create-placement-report';
 import { CreateAuthorizationRequestDto } from './dto/create-authorization-request';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(StudentGuard)
 @UseInterceptors(StudentAuthInterceptor)
@@ -52,6 +53,7 @@ export class StudentController {
   }
 
   @Post('/placements/:placementId/report')
+  @UseInterceptors(FileInterceptor('requestForm'))
   async submitPlacementReport(
     @Req() req,
 
@@ -97,6 +99,7 @@ export class StudentController {
   }
 
   @Post('/authorization-requests')
+  @UseInterceptors(FileInterceptor('requestForm'))
   async createAuthorizationRequest(
     @Req() req,
 

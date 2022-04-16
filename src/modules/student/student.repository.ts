@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { ApplicationStatus, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/services/prisma.service';
 
 @Injectable()
@@ -59,13 +59,19 @@ export class StudentRepository {
   ) {
     return await this.prisma.authorizationRequest.findMany({
       where: criteria,
+      include: {
+        student: true,
+      },
     });
   }
 
   async deleteAuthorizationRequest(authorizationRequestId) {
-    return await this.prisma.authorizationRequest.delete({
+    return await this.prisma.authorizationRequest.update({
       where: {
         id: authorizationRequestId,
+      },
+      data: {
+        status: ApplicationStatus.rejected,
       },
     });
   }
