@@ -77,19 +77,16 @@ export class AdminController {
     };
   }
 
-  @Post('/regisrations/:registrationId/approve')
+  @Post('/registrations/:registrationId/approve')
   async approveRegistration(
     @Body(new JoiValidationPipe(ApproveRegistrationSchema.body))
     body: ApproveRegistrationDto,
 
-    @Param(
-      'registrationId',
-      new JoiValidationPipe(ApproveRegistrationSchema.params),
-    )
-    registrationId: string,
+    @Param(new JoiValidationPipe(ApproveRegistrationSchema.params))
+    params,
   ) {
     const registration = await this.adminService.approveRegistration(
-      registrationId,
+      params.registrationId,
       body.type,
     );
     return {
@@ -98,19 +95,16 @@ export class AdminController {
     };
   }
 
-  @Post('/regisrations/:registrationId/reject')
+  @Post('/registrations/:registrationId/reject')
   async rejectRegistration(
     @Body(new JoiValidationPipe(RejectRegistrationSchema.body))
     body: RejectRegistrationDto,
 
-    @Param(
-      'registrationId',
-      new JoiValidationPipe(RejectRegistrationSchema.params),
-    )
-    registrationId,
+    @Param(new JoiValidationPipe(RejectRegistrationSchema.params))
+    params,
   ) {
     const registration = await this.adminService.rejectRegistration(
-      registrationId,
+      params.registrationId,
       body.type,
     );
     return {
@@ -137,14 +131,14 @@ export class AdminController {
     @Body(new JoiValidationPipe(ApproveAuthorizationRequestSchema.body))
     body: ApproveAuthorizationRequestDto,
 
-    @Param(
-      'registrationId',
-      new JoiValidationPipe(ApproveAuthorizationRequestSchema.params),
-    )
-    registrationId,
+    @Param(new JoiValidationPipe(ApproveAuthorizationRequestSchema.params))
+    params,
   ) {
     const authorizationRequest =
-      await this.adminService.approveAuthorizationRequest(body, registrationId);
+      await this.adminService.approveAuthorizationRequest(
+        body,
+        params.authorizationRequestId,
+      );
     return {
       data: authorizationRequest,
       message: 'Authorization Request approved successfully',
@@ -156,14 +150,14 @@ export class AdminController {
     @Body(new JoiValidationPipe(RejectAuthorizationRequestSchema.body))
     body: RejectAuthorizationRequestDto,
 
-    @Param(
-      'registrationId',
-      new JoiValidationPipe(RejectAuthorizationRequestSchema.params),
-    )
-    registrationId,
+    @Param(new JoiValidationPipe(RejectAuthorizationRequestSchema.params))
+    params,
   ) {
     const authorizationRequest =
-      await this.adminService.rejectAuthorizationRequest(body, registrationId);
+      await this.adminService.rejectAuthorizationRequest(
+        body,
+        params.authorizationRequestId,
+      );
     return {
       data: authorizationRequest,
       message: 'Authorization Request rejected successfully',

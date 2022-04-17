@@ -53,7 +53,7 @@ export class StudentController {
   }
 
   @Post('/placements/:placementId/report')
-  @UseInterceptors(FileInterceptor('requestForm'))
+  @UseInterceptors(FileInterceptor('report'))
   async submitPlacementReport(
     @Req() req,
 

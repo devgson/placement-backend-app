@@ -41,9 +41,9 @@ export const SubmitPlacementReportSchema = {
   }),
 
   body: Joi.object({
-    month: Joi.string().required().messages({
+    month: Joi.date().iso().messages({
       'any.required': 'Month is required',
-      'string.empty': 'Month cannot be empty',
+      'date.format': 'Month must be in iso format',
     }),
     rating: Joi.number().required().messages({
       'any.required': 'Rating is required',

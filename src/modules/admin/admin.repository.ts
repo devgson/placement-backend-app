@@ -75,8 +75,6 @@ export class AdminRepository {
       data: {
         tutorId: tutorId,
         studentId: studentId,
-        scheduledVisitDate: null,
-        scheduledVisitType: null,
         status: PlacementStatus.active,
         location: authorizationRequest.location,
         companyName: authorizationRequest.companyName,

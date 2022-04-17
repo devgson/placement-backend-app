@@ -66,12 +66,9 @@ export class StudentRepository {
   }
 
   async deleteAuthorizationRequest(authorizationRequestId) {
-    return await this.prisma.authorizationRequest.update({
+    return await this.prisma.authorizationRequest.delete({
       where: {
         id: authorizationRequestId,
-      },
-      data: {
-        status: ApplicationStatus.rejected,
       },
     });
   }

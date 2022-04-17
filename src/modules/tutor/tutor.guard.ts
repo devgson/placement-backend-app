@@ -17,11 +17,11 @@ export class TutorGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = request.headers?.authorization.replace('Bearer ', '');
-    await this.authService.validateJWT(token).catch(() => {
+    const tutor = await this.authService.validateJWT(token).catch(() => {
       throw new UnauthorizedException('Invalid Token, please obtain a new one');
     });
-    const student = this.authRepository.getTutor({ email: token.email });
-    if (!student) {
+    const tutorExists = this.authRepository.getTutor({ email: tutor.email });
+    if (!tutorExists) {
       throw new UnauthorizedException('Invalid Token, please obtain a new one');
     }
     return true;

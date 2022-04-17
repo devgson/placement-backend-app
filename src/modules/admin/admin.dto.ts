@@ -2,7 +2,7 @@ import { ApplicationStatus, PlacementStatus } from '@prisma/client';
 
 export class GetTutorDto {
   id?: string;
-  status?: ApplicationStatus;
+  registrationStatus?: ApplicationStatus;
 }
 
 export class GetStudentDto {
@@ -17,8 +17,8 @@ export class GetPlacementDto {
 
 export class GetRegistrationsDto {
   id?: string;
-  type: 'student' | 'tutor';
-  status: ApplicationStatus = ApplicationStatus.pending;
+  type?: 'student' | 'tutor';
+  registrationStatus?: ApplicationStatus = ApplicationStatus.pending;
 }
 
 export class GetAuthorizationRequestsDto {

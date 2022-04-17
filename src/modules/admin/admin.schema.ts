@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 
 export const GetTutorSchema = Joi.object({
-  status: Joi.string()
+  registrationStatus: Joi.string()
     .valid('pending', 'approved', 'rejected')
     .messages({
       'string.empty': 'status cannot be empty',
@@ -52,7 +52,7 @@ export const GetPlacementSchema = Joi.object({
 });
 
 export const GetRegistrationsSchema = Joi.object({
-  status: Joi.string()
+  registrationStatus: Joi.string()
     .valid('pending', 'approved', 'rejected')
     .messages({
       'string.empty': 'status cannot be empty',
@@ -136,15 +136,14 @@ export const ApproveAuthorizationRequestSchema = {
     comment: Joi.string()
       .trim()
       .max(255)
-      .required()
       .messages({
         'string.max': 'Comment must not be greater than 255 characters',
       })
       .optional(),
   }),
   params: Joi.object({
-    registrationId: Joi.string().guid().required().messages({
-      'any.required': 'Registration Id is required',
+    authorizationRequestId: Joi.string().guid().required().messages({
+      'any.required': 'Authorization Request Id is required',
       'string.empty': 'Field cannot be empty',
       'string.guid': 'Field must be a valid uuid',
     }),
@@ -163,8 +162,8 @@ export const RejectAuthorizationRequestSchema = {
       .optional(),
   }),
   params: Joi.object({
-    registrationId: Joi.string().guid().required().messages({
-      'any.required': 'Registration Id is required',
+    authorizationRequestId: Joi.string().guid().required().messages({
+      'any.required': 'Authorization Request Id is required',
       'string.empty': 'Field cannot be empty',
       'string.guid': 'Field must be a valid uuid',
     }),

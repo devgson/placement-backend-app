@@ -38,10 +38,12 @@ export class AdminService {
       case 'student':
         return await this.studentRepository.getStudents(query);
       default:
-        return await Promise.all([
-          this.tutorRepository.getTutors(query),
-          this.studentRepository.getStudents(query),
-        ]);
+        return (
+          await Promise.all([
+            this.tutorRepository.getTutors(query),
+            this.studentRepository.getStudents(query),
+          ])
+        ).flat();
     }
   }
 

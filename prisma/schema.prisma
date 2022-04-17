@@ -81,8 +81,8 @@ model Placement {
   endDate                DateTime
   startDate              DateTime
   status                 PlacementStatus      @default(active)
-  scheduledVisitDate     DateTime
-  scheduledVisitType     ScheduledVisitType
+  scheduledVisitDate     DateTime?             
+  scheduledVisitType     ScheduledVisitType?
   scheduledVisitStatus   ScheduledVisitStatus @default(pending)
   updatedAt              DateTime             @updatedAt
   createdAt              DateTime             @default(now())
@@ -99,7 +99,7 @@ model Placement {
 
 model PlacementMonthlyReport {
   id          String   @id @db.Uuid @default(uuid())
-  month       String
+  month       DateTime
   report      String
   rating      Int
   updatedAt   DateTime @updatedAt
