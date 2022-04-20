@@ -3,13 +3,17 @@ import {
   Controller,
   Get,
   Param,
-  Post,
+  Put,
   Query,
   Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { GetTutorPlacementsDto, SchedulePlacementVisitDto } from './tutor.dto';
+import {
+  GetTutorPlacementsDto,
+  SchedulePlacementVisitDto,
+  SchedulePlacementVisitStatusDto,
+} from './tutor.dto';
 import { TutorGuard } from './tutor.guard';
 import {
   ResponseTransformerInterceptor,
@@ -19,6 +23,7 @@ import { JoiValidationPipe } from './tutor.pipe';
 import {
   GetTutorPlacementsSchema,
   SchedulePlacementVisitSchema,
+  SchedulePlacementVisitStatusSchema,
 } from './tutor.schema';
 import { TutorService } from './tutor.service';
 
@@ -47,7 +52,7 @@ export class TutorController {
     };
   }
 
-  @Post('/placements/:placementId/visit')
+  @Put('/placements/:placementId/visit')
   async schedulePlacementVisit(
     @Req()
     req,
@@ -58,7 +63,7 @@ export class TutorController {
     @Param(new JoiValidationPipe(SchedulePlacementVisitSchema.params))
     param,
   ) {
-    const placement = await this.tutorService.schedulePlacementVisit(
+    const placement = await this.tutorService.updatePlacement(
       req.user.id,
       param.placementId,
       body,
@@ -66,6 +71,28 @@ export class TutorController {
     return {
       data: placement,
       message: 'Scheduled placement visit successfully',
+    };
+  }
+
+  @Put('/placements/:placementId/visit/status')
+  async setScheduledVisitStatus(
+    @Req()
+    req,
+
+    @Body(new JoiValidationPipe(SchedulePlacementVisitStatusSchema.body))
+    body: SchedulePlacementVisitStatusDto,
+
+    @Param(new JoiValidationPipe(SchedulePlacementVisitStatusSchema.params))
+    param,
+  ) {
+    const placement = await this.tutorService.updatePlacement(
+      req.user.id,
+      param.placementId,
+      body,
+    );
+    return {
+      data: placement,
+      message: 'Updated placement visit successfully',
     };
   }
 }

@@ -43,3 +43,23 @@ export const SchedulePlacementVisitSchema = {
     }),
   }),
 };
+
+export const SchedulePlacementVisitStatusSchema = {
+  body: Joi.object({
+    scheduledVisitStatus: Joi.string()
+      .required()
+      .valid('done', 'pending')
+      .messages({
+        'string.empty': 'Status cannot be empty',
+        'any.only': 'Invalid field, send either done or pending',
+      }),
+  }),
+
+  params: Joi.object({
+    placementId: Joi.string().guid().required().messages({
+      'any.required': 'Placement Id is required',
+      'string.empty': 'Placement Id cannot be empty',
+      'string.guid': 'Placement Id must be a valid uuid',
+    }),
+  }),
+};

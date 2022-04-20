@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { TutorRepository } from './tutor.repository';
 import { ScheduledVisitStatus } from '@prisma/client';
-import { GetTutorPlacementsDto, SchedulePlacementVisitDto } from './tutor.dto';
+import { GetTutorPlacementsDto } from './tutor.dto';
 
 @Injectable()
 export class TutorService {
@@ -19,11 +19,7 @@ export class TutorService {
     return this.tutorRepository.getTutorPlacements(tutorId, criteria);
   }
 
-  async schedulePlacementVisit(
-    tutorId: string,
-    placementId: string,
-    data: SchedulePlacementVisitDto,
-  ) {
+  async updatePlacement<T>(tutorId: string, placementId: string, data: T) {
     return this.tutorRepository.updatePlacement(tutorId, placementId, data);
   }
 }
