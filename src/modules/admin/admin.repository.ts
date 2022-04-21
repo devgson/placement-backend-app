@@ -77,6 +77,8 @@ export class AdminRepository {
         studentId: studentId,
         status: PlacementStatus.active,
         location: authorizationRequest.location,
+        latitude: authorizationRequest.latitude,
+        longitude: authorizationRequest.longitude,
         companyName: authorizationRequest.companyName,
         endDate: authorizationRequest.potentialEndDate,
         authorizationRequestId: authorizationRequest.id,

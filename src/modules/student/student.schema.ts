@@ -115,9 +115,13 @@ export const CreateAuthorizationRequestSchema = {
       'any.required': 'Location is required',
       'string.empty': 'Location cannot be empty',
     }),
-    duration: Joi.string().required().messages({
-      'any.required': 'Duration is required',
-      'string.empty': 'Duration cannot be empty',
+    latitude: Joi.string().required().messages({
+      'any.required': 'Latitude is required',
+      'string.empty': 'Latitude cannot be empty',
+    }),
+    longitude: Joi.string().required().messages({
+      'any.required': 'Longitude is required',
+      'string.empty': 'Longitude cannot be empty',
     }),
     potentialStartDate: Joi.date().iso().messages({
       'any.required': 'Potential Start Date is required',

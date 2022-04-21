@@ -57,7 +57,8 @@ model AuthorizationRequest {
   companyName        String
   companySector      String
   location           String
-  duration           String
+  latitude           String                     @default("0")
+  longitude          String                     @default("0")
   potentialEndDate   DateTime
   potentialStartDate DateTime
   requestForm        String
@@ -78,6 +79,8 @@ model Placement {
   companyName            String
   companySector          String
   location               String
+  latitude               String               @default("0")
+  longitude              String               @default("0")
   endDate                DateTime
   startDate              DateTime
   status                 PlacementStatus      @default(active)
