@@ -7,7 +7,7 @@ import { AuthRepository } from './auth.repository';
 import { RegisterStudentDto } from './dto/register-student.dto';
 
 import * as bcrypt from 'bcrypt';
-import { FileService } from 'src/services/file.service';
+import { FileService } from '../../../src/services/file.service';
 import { RegisterTutorDto } from './dto/register-tutor.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ApplicationStatus } from '@prisma/client';

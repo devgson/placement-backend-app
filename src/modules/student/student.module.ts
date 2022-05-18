@@ -3,7 +3,7 @@ import { StudentController } from './student.controller';
 import { StudentService } from './student.service';
 import { StudentRepository } from './student.repository';
 import { AuthModule } from '../auth/auth.module';
-import { AppModule } from 'src/app.module';
+import { AppModule } from '../../../src/app.module';
 
 @Module({
   imports: [AuthModule, forwardRef(() => AppModule)],

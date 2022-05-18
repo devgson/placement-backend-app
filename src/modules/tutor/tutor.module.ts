@@ -1,5 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { AppModule } from 'src/app.module';
+import { AppModule } from '../../../src/app.module';
 import { AuthModule } from '../auth/auth.module';
 import { TutorController } from './tutor.controller';
 import { TutorRepository } from './tutor.repository';

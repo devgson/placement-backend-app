@@ -20,7 +20,9 @@ export class TutorGuard implements CanActivate {
     const tutor = await this.authService.validateJWT(token).catch(() => {
       throw new UnauthorizedException('Invalid Token, please obtain a new one');
     });
-    const tutorExists = this.authRepository.getTutor({ email: tutor.email });
+    const tutorExists = await this.authRepository.getTutor({
+      email: tutor.email,
+    });
     if (!tutorExists) {
       throw new UnauthorizedException('Invalid Token, please obtain a new one');
     }

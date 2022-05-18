@@ -1,7 +1,7 @@
 import { ScheduledVisitStatus, ScheduledVisitType } from '@prisma/client';
 
 export class SchedulePlacementVisitDto {
-  scheduledVisitDate: Date;
+  scheduledVisitDate: string;
   scheduledVisitType: ScheduledVisitType;
 }
 
