@@ -5,7 +5,7 @@ import {
   PlacementStatus,
   Prisma,
 } from '@prisma/client';
-import { PrismaService } from '../../../src/services/prisma.service';
+import { PrismaService } from '../../services/prisma.service';
 
 @Injectable()
 export class AdminRepository {
