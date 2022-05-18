@@ -2,9 +2,12 @@
 
 Placement Backend
 
+Link to the Commit History: https://github.com/devgson/placement-backend-app/commits/main
 ## Installation
 
-Run the command below in a terminal to install the necessary libraries.
+Download NPM and Node.js through the link: https://nodejs.org/en/download/
+
+Then the command below in a terminal to install the necessary libraries.
 
 ```bash
 $ npm install
